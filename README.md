@@ -88,6 +88,10 @@ require('copilot').setup({
       refresh = "gr",
       open = "<M-CR>"
     },
+    position = {
+      split = "horizontal",
+      size = 0.4
+    }
   },
   suggestion = {
     enabled = true,
@@ -131,7 +135,7 @@ The `copilot.panel` module exposes the following functions:
 require("copilot.panel").accept()
 require("copilot.panel").jump_next()
 require("copilot.panel").jump_prev()
-require("copilot.panel").open()
+require("copilot.panel").open({split, size})
 require("copilot.panel").refresh()
 ```
 

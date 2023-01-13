@@ -12,6 +12,10 @@ local default_config = {
       refresh = "gr",
       open = "<M-CR>",
     },
+    position = {
+      split = "horizontal",
+      size = 0.4
+    }
   },
   ---@class copilot_config_suggestion
   suggestion = {

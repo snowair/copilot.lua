@@ -34,6 +34,10 @@ local panel = {
     was_insert = nil,
     auto_refreshing = nil,
   },
+  position = {
+    split = "horizontal",
+    size = 0.4
+  },
 
   auto_refresh = false,
   keymap = {},
@@ -302,10 +306,12 @@ function panel:ensure_winid()
     return
   end
 
-  local height = math.floor(vim.api.nvim_win_get_height(0) * 0.4)
+  local winsize_fn = self.position.split == 'vertical' and vim.api.nvim_win_get_width or vim.api.nvim_win_get_height
+  local splitcmd = self.position.split == 'vertical' and 'vsplit' or 'split'
+  local size = math.floor(winsize_fn(0) * self.position.size)
 
   self.winid = vim.api.nvim_win_call(0, function()
-    vim.cmd("silent noswapfile " .. tostring(height) .. "split")
+    vim.cmd("silent noswapfile " .. tostring(size) .. splitcmd)
     return vim.api.nvim_get_current_win()
   end)
 
@@ -482,7 +488,10 @@ function mod.refresh()
   end)
 end
 
-function mod.open()
+-- @param position {split: string, size: number}
+-- split: (optional) 'horizontal' | 'vertical'
+-- size: (optional) between 0 and 1
+function mod.open(position)
   local client = util.get_copilot_client()
   if not client then
     print("Error, copilot not running")
@@ -490,6 +499,7 @@ function mod.open()
   end
 
   panel.client = client
+  panel.position = vim.tbl_deep_extend("force", panel.position, position or {})
 
   panel:init()
 end
@@ -504,6 +514,7 @@ function mod.setup(config)
   panel.auto_refresh = config.auto_refresh or false
 
   panel.keymap = config.keymap or {}
+  panel.position = vim.tbl_deep_extend('force', panel.position, config.position or {})
 
   if panel.keymap.open then
     vim.keymap.set("i", panel.keymap.open, mod.open, {
