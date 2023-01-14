@@ -1,5 +1,6 @@
 local api = require("copilot.api")
 local u = require("copilot.util")
+local c = require("copilot.client")
 
 local M = {}
 
@@ -102,6 +103,7 @@ function M.setup(client)
 end
 
 function M.signin()
+  c.start_client()
   local client = u.get_copilot_client()
   if not client then
     return

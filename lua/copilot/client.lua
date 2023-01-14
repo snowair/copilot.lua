@@ -5,6 +5,12 @@ local util = require("copilot.util")
 local M = {}
 local client_config
 
+function M.start_client()
+  if client_config~=nil then
+    vim.lsp.start_client(client_config)
+  end
+end
+
 local copilot_node_version = nil
 function M.get_node_version()
   if not copilot_node_version then
