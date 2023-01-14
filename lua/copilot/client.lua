@@ -3,6 +3,7 @@ local config = require("copilot.config")
 local util = require("copilot.util")
 
 local M = {}
+local client_config
 
 local copilot_node_version = nil
 function M.get_node_version()
@@ -73,8 +74,14 @@ M.merge_server_opts = function(params)
 end
 
 M.start = function(params)
-  local client_config = M.merge_server_opts(params)
+  client_config = M.merge_server_opts(params)
   vim.lsp.start_client(client_config)
+end
+
+M.restart = function()
+    if client_config~= nil then
+      vim.lsp.start_client(client_config)
+    end
 end
 
 return M
